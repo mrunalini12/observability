@@ -1,0 +1,30 @@
+server:
+  http_listen_port: 9080
+  grpc_listen_port: 0
+
+positions:
+  filename: /tmp/positions.yaml
+
+clients:
+  - url: http://loki:3100/loki/api/v1/push
+
+scrape_configs:
+  - job_name: 'node-observability_logs'  # Unique job name
+    static_configs:
+      - targets:
+          - localhost
+        labels: 
+          job: 'node-observability'  # Corrected indentation
+          app: 'node-observability'
+          __path__: /var/log/*.log  # Adjust path if necessary
+
+  - job_name: 'app_logs'  # You can give this a more descriptive job name
+    static_configs:
+      - targets:
+          - localhost
+        labels:
+          job: 'app_logs'
+          service_name: 'node-observability'  # Customize with your app name
+          __path__: ./logs/*.log
+ # Update with the correct path
+
